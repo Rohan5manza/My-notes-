@@ -1,0 +1,20 @@
+Single Neuron:
+
+Single neuron models are linear models ( y= wx+b)
+Linear units in Keras : using keras.Sequential, we can create neural network as a stack of layers.
+
+
+from tensorflow import keras
+from tensorflow.keras import layers
+model= keras.Sequential([layers.Dense(units=1, input_shape=[3])])
+
+the first argument, units, is how many outputs we want
+
+Keras represents weights as tensors. Tensors are basically Tensorflow's version of Numpy arrays, but with some differences.
+
+A model's weights are kept in its 'weights' attribute as a list of tensors.
+
+Keras also uses tensors for representing data. If input_shape=3, it means network will be created, that expects vectors of length 3, like [0.2,0.4,0.7]
+
+
+Deep Neural Networks:
