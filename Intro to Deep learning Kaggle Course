@@ -1,4 +1,4 @@
-Single Neuron:
+1.Single Neuron:
 
 Single neuron models are linear models ( y= wx+b)
 Linear units in Keras : using keras.Sequential, we can create neural network as a stack of layers.
@@ -17,4 +17,79 @@ A model's weights are kept in its 'weights' attribute as a list of tensors.
 Keras also uses tensors for representing data. If input_shape=3, it means network will be created, that expects vectors of length 3, like [0.2,0.4,0.7]
 
 
-Deep Neural Networks:
+2.Deep Neural Networks:
+
+Without activation functions, neural networks can only learn linear relationships.
+
+2 dense layers with nothing in between them are no better than a single dense layer by itself
+
+A layer, essentially, can be any kind of data transformation.
+Dense layers by themselves can never move us out of the world of lines and planes. 
+What we need is something nonlinear. What we need are activation functions.
+
+An activation function is simply some function we apply to each of a layer's outputs
+The most common is the rectifier function max(0,x).
+It rectifies the negative part of the line graph to zero.
+Applying the function to the outputs of a neuron will put a bend in the data, moving us away from simple lines.
+
+When we attach the rectifier to a linear unit, we get a rectified linear unit or ReLU. 
+(For this reason, it's common to call the rectifier function the "ReLU function".) Applying a ReLU activation to a linear unit means the output becomes max(0, w * x + b)
+
+
+The usual way of attaching an activation function to a Dense layer is to include it as part of the definition with the activation argument. Sometimes though you'll want to put some other layer between the Dense layer and its activation function. (We'll see an example of this in Lesson 5 with batch normalization.) In this case, we can define the activation in its own Activation layer, like so:
+
+layers.Dense(units=8),
+layers.Activation('relu')
+This is completely equivalent to the ordinary way: layers.Dense(units=8, activation='relu').
+
+
+3. Stochastic Gradient Descent
+
+A "loss function"  measures how good the network's predictions are.
+An "optimizer"  tells the network how to change its weights.
+
+
+The optimizer is an algorithm that adjusts the weights to minimize the loss.
+
+Virtually all of the optimization algorithms used in deep learning belong to a family called stochastic gradient descent. They are iterative algorithms that train a network in steps. One step of training goes like this:
+
+Sample some training data and run it through the network to make predictions.
+Measure the loss between the predictions and the true values.
+Finally, adjust the weights in a direction that makes the loss smaller.
+
+
+Each iteration's sample of training data is called a minibatch (or often just "batch"), while a complete round of the training data is called an epoch.
+The number of epochs you train for is how many times the network will see each training example
+
+A smaller learning rate means the network needs to see more minibatches before its weights converge to their best values.
+
+The learning rate and the size of the minibatches are the two parameters that have the largest effect on how the SGD training proceeds.
+
+After defining a model, you can add a loss function and optimizer with the model's compile method:
+
+model.compile(
+    optimizer="adam",
+    loss="mae",
+)
+
+What's In a Name?
+The gradient is a vector that tells us in what direction the weights need to go. More precisely, it tells us how to change the weights to make the loss change fastest.
+We call our process gradient descent because it uses the gradient to descend the loss curve towards a minimum. Stochastic means "determined by chance." Our training is stochastic because the minibatches are random samples from the dataset. And that's why it's called SGD!
+
+Often, a better way to view the loss though is to plot it. The fit method in fact keeps a record of the loss produced during training in a History object. We'll convert the data to a Pandas dataframe, which makes the plotting easy.
+
+import pandas as pd
+h=model.fit( X_train, ...........)
+# convert the training history to a dataframe
+history_df = pd.DataFrame(h.history)
+# use Pandas native plot method
+history_df['loss'].plot();
+
+Use animate_sgd(learning_rate,batch_size,num_examples) function to animate the graphs
+
+smaller batch sizes gave noisier weight updates and loss curves. This is because each batch is a small sample of data and smaller samples tend to give noisier estimates. Smaller batches can have an "averaging" effect though which can be beneficial.
+
+Smaller learning rates make the updates smaller and the training takes longer to converge. Large learning rates can speed up training, but don't "settle in" to a minimum as well. When the learning rate is too large, the training can fail completely
+
+
+4. Overfitting and underfitting
