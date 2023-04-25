@@ -1,0 +1,6 @@
+Reference: https://www.youtube.com/watch?v=U0s0f995w14
+Notes related to important concepts I learnt, both while watching the video, and when I personally did a coding project, and when I studied the research paper
+
+Positional encoding: a component of the transformer architecture. 
+"It is permutation invariant": meaning that if a text prompt contains a sentence, and you change the order of the words, it won't have any effect on the output.
+This is obviously a weakness, as changing order of words changes the entire meaning of the sentence.
